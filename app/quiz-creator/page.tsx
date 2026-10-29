@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { QuizCreator } from './_components/QuizCreator'
 
 export const metadata: Metadata = {
   title: 'Создать тест',
@@ -6,5 +7,5 @@ export const metadata: Metadata = {
 }
 
 export default function QuizCreatorPage() {
-  return <div>QuizCreatorPage</div>
+  return <QuizCreator />
 }

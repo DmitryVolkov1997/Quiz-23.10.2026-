@@ -1,7 +1,7 @@
 'use client'
 import { sidebarOpenAtom } from '@/store/sidebar/sidebar.atom'
-import cn from 'clsx'
 import { useAtom } from 'jotai'
+import { cn } from './utils'
 
 export const Backdrop = () => {
   const [isOpen, setIsOpen] = useAtom(sidebarOpenAtom)
