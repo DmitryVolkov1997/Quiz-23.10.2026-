@@ -1,12 +1,15 @@
 import { Sidebar } from '@/components/layout/app-shell/sidebar/Sidebar'
 import { Backdrop } from '@/components/ui/Backdrop'
-import { ReactNode } from 'react'
+import { Spinner } from '@/components/ui/Spinner'
+import { ReactNode, Suspense } from 'react'
 import { BurgerBtn } from './burger-btn/BurgerBtn'
 
 export const AppShell = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      <Sidebar />
+      <Suspense fallback={<Spinner />}>
+        <Sidebar />
+      </Suspense>
       <BurgerBtn />
       <Backdrop />
 

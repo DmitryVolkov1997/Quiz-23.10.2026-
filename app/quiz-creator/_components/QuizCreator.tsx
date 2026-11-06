@@ -3,9 +3,9 @@
 import { Button } from '@/components/ui/Button'
 import { InputField } from '@/components/ui/InputField'
 import { SelectField } from '@/components/ui/SelectField'
-import { quizzesAtom } from '@/store/quiz/quiz.atom'
+import { db } from '@/config/firebase.config'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAtom } from 'jotai'
+import { addDoc, collection } from 'firebase/firestore'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { answerOptions } from '../answer-options'
@@ -20,7 +20,6 @@ import {
 import { createEmptyQuestion, questionFields } from './quiz-creator.fields'
 
 export const QuizCreator = () => {
-  const [_, setQuizzes] = useAtom(quizzesAtom)
   const [questions, setQuestions] = useState<QuestionInput[]>([])
 
   const questionForm = useForm<QuestionInput, unknown, Question>({
@@ -44,15 +43,20 @@ export const QuizCreator = () => {
     questionForm.reset(createEmptyQuestion())
   })
 
-  const createQuiz = quizForm.handleSubmit(({ subject }) => {
+  const createQuiz = quizForm.handleSubmit(async ({ subject }) => {
     const result = quizSchema.safeParse({ subject, questions })
 
     if (!result.success) return
 
-    setQuizzes(oldQuizzes => [...oldQuizzes, result.data])
-    setQuestions([])
-    quizForm.reset({ subject: '' })
-    questionForm.reset(createEmptyQuestion())
+    try {
+      const docRef = await addDoc(collection(db, 'quizzes'), result.data)
+      console.log('Тест записан с ID', docRef.id)
+      setQuestions([])
+      quizForm.reset({ subject: '' })
+      questionForm.reset(createEmptyQuestion())
+    } catch (e) {
+      console.error('Не удалось создать тест', e)
+    }
   })
 
   return (

@@ -27,3 +27,4 @@ export type QuestionInput = z.input<typeof questionSchema>
 export type Question = z.output<typeof questionSchema>
 export type SubjectInput = z.input<typeof subjectSchema>
 export type Quiz = z.infer<typeof quizSchema>
+export type QuizListItem = Quiz & { id: string }

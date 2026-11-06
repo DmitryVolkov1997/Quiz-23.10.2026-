@@ -10,11 +10,9 @@ export const Backdrop = () => {
     <div
       className={cn(
         'fixed inset-0 z-30 bg-black/80 transition-opacity duration-300',
-        isOpen
-          ? 'pointer-events-auto opacity-100'
-          : 'pointer-events-none opacity-0'
+        isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
       )}
-      aria-hidden="true"
+      aria-hidden='true'
       onClick={() => setIsOpen(false)}
     />
   )
