@@ -1,9 +1,13 @@
 import { PAGES } from '@/config/routes'
 
 export const links = [
+  // {
+  //   to: PAGES.HOME,
+  //   label: 'Главная'
+  // },
   {
-    to: PAGES.HOME,
-    label: 'Главная'
+    to: PAGES.AUTH,
+    label: 'Авторизация'
   },
   {
     to: PAGES.QUIZZES,

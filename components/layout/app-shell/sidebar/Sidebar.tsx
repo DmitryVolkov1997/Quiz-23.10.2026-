@@ -1,11 +1,15 @@
 'use client'
+import { auth } from '@/config/firebase.config'
+import { PAGES } from '@/config/routes'
 import { useBodyScrollLock } from '@/hooks/useBodyScrollLock'
 import { useEscapeKey } from '@/hooks/useEscapeKey'
+import { useUser } from '@/hooks/useUser'
 import { sidebarOpenAtom } from '@/store/sidebar/sidebar.atom'
 import cn from 'clsx'
+import { signOut } from 'firebase/auth'
 import { useAtom } from 'jotai'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { links } from './links.data'
 
@@ -14,10 +18,17 @@ export const Sidebar = () => {
   const pathname = usePathname()
   useEscapeKey()
   useBodyScrollLock(isOpen)
+  const { isLoading, user } = useUser()
+  const router = useRouter()
 
   useEffect(() => {
     setIsOpen(false)
   }, [pathname, setIsOpen])
+
+  const handleSignOut = async () => {
+    await signOut(auth)
+    router.replace(PAGES.HOME)
+  }
 
   return (
     <aside
@@ -30,6 +41,33 @@ export const Sidebar = () => {
         isOpen ? 'translate-x-0' : '-translate-x-(--sidebar-width)'
       )}
     >
+      {!isLoading && user && (
+        <div className="mb-6 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-full border border-violet-300/30 bg-linear-to-br from-violet-500/30 to-blue-500/20 font-semibold text-violet-100">
+            {user.email?.[0]?.toUpperCase() ?? '?'}
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-white">
+              {user.displayName || 'Пользователь'}
+            </p>
+            <p
+              className="truncate text-xs text-white/50"
+              title={user.email ?? ''}
+            >
+              {user.email}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            className="rounded-lg px-2 py-1.5 text-xs text-white/50 transition hover:bg-white/10 hover:text-white"
+            onClick={handleSignOut}
+          >
+            Выйти
+          </button>
+        </div>
+      )}
       <nav>
         <ul className="flex flex-col gap-3">
           {links.map(link => {

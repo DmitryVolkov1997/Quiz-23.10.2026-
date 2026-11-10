@@ -1,3 +1,6 @@
+import { PAGES } from '@/config/routes'
+import { redirect } from 'next/navigation'
+
 export default function Home() {
-  return <div>Home</div>
+  redirect(PAGES.QUIZZES)
 }

@@ -1,3 +1,4 @@
+import { AuthGuard } from '@/components/auth/AuthGuard'
 import type { Metadata } from 'next'
 import { QuizCreator } from './_components/QuizCreator'
 
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 }
 
 export default function QuizCreatorPage() {
-  return <QuizCreator />
+  return (
+    <AuthGuard>
+      <QuizCreator />
+    </AuthGuard>
+  )
 }
